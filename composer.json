@@ -1,0 +1,37 @@
+{
+    "name": "fond-of-spryker/active-campaign",
+    "description": "n/a",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pascal Fischer",
+            "email": "pascal.fischer@fondof.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "spryker/checkout": "*",
+        "spryker/code-sniffer": "*",
+        "spryker/propel": "*",
+        "spryker/silex": "*",
+        "spryker/testify": "*",
+        "codeception/codeception": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "FondOfSpryker\\": "src/FondOfSpryker/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FondOfSpryker\\": "tests/FondOfSpryker/",
+            "Generated\\": "tests/Generated/"
+        }
+    },
+    "require": {
+        "mikey179/vfsStream": "^1.6",
+        "phpro/grumphp": "^0.14.0",
+        "sebastian/phpcpd": "^4.0"
+    }
+}

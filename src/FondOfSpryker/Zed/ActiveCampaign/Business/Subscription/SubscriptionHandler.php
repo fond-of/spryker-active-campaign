@@ -1,0 +1,136 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: paf
+ * Date: 23.02.18
+ * Time: 13:28
+ */
+
+namespace FondOfSpryker\Zed\ActiveCampaign\Business\Subscription;
+
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use FondOfBags\ActiveCampaign\DataTransferObject\Contact;
+use FondOfBags\ActiveCampaign\Service\Contact as ContactService;
+use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
+use Generated\Shared\Transfer\ActiveCampaignResponseTransfer;
+
+/**
+ * @method \FondOfSpryker\Zed\ActiveCampaign\Business\ActiveCampaignBusinessFactory getFactory()
+ */
+class SubscriptionHandler
+{
+    /**
+     * @var \FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig
+     */
+    protected $config;
+
+    /**
+     * @var \FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService
+     */
+    protected $service;
+
+    /**
+     * @var \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
+     */
+    protected $transfer;
+
+    /**
+     * SubscriptionHandler constructor.
+     *
+     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $config
+     * @param \FondOfBags\ActiveCampaign\Service\Contact $contactService
+     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+     */
+    public function __construct(
+        ActiveCampaignRequestTransfer $config,
+        ContactService $contactService,
+        ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+    ) {
+        AnnotationRegistry::registerLoader('class_exists');
+
+        $this->config = $config;
+        $this->transfer = $activeCampaignRequestTransfer;
+        $this->config->initByTransfer($this->transfer);
+        $this->service = $contactService;
+    }
+
+    /**
+     * @return void
+     */
+    public function processNewsletterSubscriptions(): void
+    {
+        /** @var \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact */
+        $contact = $this->service->getByEmail($this->transfer->getEmail());
+
+        $response = new ActiveCampaignResponseTransfer();
+
+        if ($contact !== null && $contact->getId() > 0) {
+            if (false === $this->isContactActiveOnListId($contact)) {
+                if (true === $this->isContactActiveOnAnyList($contact)) {
+                    $response->setAddedToList(true);
+                }
+            } else {
+                $response->setAllreadyInList(true);
+            }
+        } else {
+            $response = $this->createNewContact();
+        }
+
+        //return $response;
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\ActiveCampaignResponseTransfer
+     */
+    protected function createNewContact()
+    {
+        $result = $this->service->formRequest(['email' => $this->transfer->getEmail()], $this->config->getFormId());
+        $activeCampaignResponseTransfer = new ActiveCampaignResponseTransfer();
+
+        if ($result === true) {
+            $activeCampaignResponseTransfer->setSubscribe(true);
+        }
+
+        return $activeCampaignResponseTransfer;
+    }
+
+    /**
+     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
+     *
+     * @return bool
+     */
+    protected function isContactActiveOnListId(Contact $contact)
+    {
+        if ($contact->getId() > 0 && $contact->getLists()) {
+
+            /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
+            foreach ($contact->getLists() as $list) {
+                if ($list->getListId() === $this->config->getListId()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
+     *
+     * @return bool
+     */
+    protected function isContactActiveOnAnyList(Contact $contact)
+    {
+        if (count($contact->getLists()) > 0) {
+
+            /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
+            foreach ($contact->getLists() as $list) {
+                if ($list->getStatus() === 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}

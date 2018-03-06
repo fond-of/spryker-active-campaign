@@ -1,0 +1,15 @@
+<div class="small-12 columns">
+    <div class="small-12 medium-4 columns">
+        {{ form_start(activeCampaignSubscriptionForm) }}
+            <div class="input-group">
+                <span class="input-group-label">
+                    <i class="fa fa-at"></i>
+                </span>
+                {{ form_row(activeCampaignSubscriptionForm.email) }}
+            </div>
+
+            {{ form_row(activeCampaignSubscriptionForm.submit) }}
+        {{ form_end(activeCampaignSubscriptionForm) }}
+    </div>
+</div>
+
