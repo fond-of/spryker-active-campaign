@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: paf
- * Date: 22.02.18
- * Time: 08:50
- */
 
 namespace FondOfSpryker\Yves\ActiveCampaign;
 

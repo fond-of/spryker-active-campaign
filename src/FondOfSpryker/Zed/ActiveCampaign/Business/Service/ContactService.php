@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: paf
- * Date: 27.02.18
- * Time: 15:28
- */
 
 namespace FondOfSpryker\Zed\ActiveCampaign\Business\Service;
 

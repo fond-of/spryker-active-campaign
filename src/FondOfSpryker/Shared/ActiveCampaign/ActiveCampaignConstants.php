@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: paf
- * Date: 23.02.18
- * Time: 13:48
- */
 
 namespace FondOfSpryker\Shared\ActiveCampaign;
 
