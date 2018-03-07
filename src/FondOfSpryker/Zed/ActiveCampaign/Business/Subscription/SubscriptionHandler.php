@@ -4,7 +4,9 @@ namespace FondOfSpryker\Zed\ActiveCampaign\Business\Subscription;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use FondOfBags\ActiveCampaign\DataTransferObject\Contact;
-use FondOfBags\ActiveCampaign\Service\Contact as ContactService;
+//use FondOfBags\ActiveCampaign\Service\Contact as ContactService;
+use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
+use FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig;
 use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
 use Generated\Shared\Transfer\ActiveCampaignResponseTransfer;
 
@@ -36,7 +38,7 @@ class SubscriptionHandler
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      */
     public function __construct(
-        ActiveCampaignRequestTransfer $config,
+        ActiveCampaignConfig $config,
         ContactService $contactService,
         ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
     ) {
@@ -62,6 +64,7 @@ class SubscriptionHandler
             if (false === $this->isContactActiveOnListId($contact)) {
                 if (true === $this->isContactActiveOnAnyList($contact)) {
                     $response->setAddedToList(true);
+                    $this->service->linkContactToList($contact, $this->config->getListId());
                 }
             } else {
                 $response->setAllreadyInList(true);

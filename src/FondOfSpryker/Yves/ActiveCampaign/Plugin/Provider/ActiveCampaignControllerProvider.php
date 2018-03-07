@@ -6,6 +6,7 @@ use Silex\Application;
 
 class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
 {
+    const ROUTE_ACTIVECAMPAIGN_FOOTER = 'ROUTE_ACTIVECAMPAIGN_FOOTER';
     const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE';
     const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM';
 
@@ -17,6 +18,15 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     protected function defineControllers(Application $app)
     {
         $allowedLocalesPattern = $this->getAllowedLocalesPattern();
+
+
+        $this->createController(
+            '{locale}/newsletter/subscribe/',
+            static::ROUTE_ACTIVECAMPAIGN_FOOTER,
+            'ActiveCampaign',
+            'Index',
+            'subscribe'
+        )->method('GET|POST');
 
         $this->createController(
             '{newsletter}/subscribe/',
@@ -36,7 +46,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
             'Index',
             'subscribeConfirmation'
         )
-            ->method('GET|POST')
+            ->method('GET')
             ->assert('newsletter', $allowedLocalesPattern . 'newsletter|newsletter');
         ;
     }
