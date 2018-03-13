@@ -11,7 +11,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "fond-of-php/active-campaign": "^1.0.0",
+        "fond-of-php/active-campaign": "^1.0.0"
     },
     "require-dev": {
         "spryker/code-sniffer": "^0.11",
