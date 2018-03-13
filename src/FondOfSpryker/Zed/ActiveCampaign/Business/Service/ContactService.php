@@ -2,7 +2,6 @@
 
 namespace FondOfSpryker\Zed\ActiveCampaign\Business\Service;
 
-
 use FondOfBags\ActiveCampaign\DataTransferObject\Contact as ContactTransfer;
 use FondOfBags\ActiveCampaign\Service\Contact;
 use GuzzleHttp\Client;
@@ -21,9 +20,10 @@ class ContactService extends Contact
     }
 
     /**
-     * @param ContactTransfer $contact
+     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
      * @param int $linkListId
-     * @throws \Exception
+     *
+     * @return void
      */
     public function linkContactToList(ContactTransfer $contact, int $linkListId): void
     {
@@ -36,7 +36,7 @@ class ContactService extends Contact
                     'id' => $contact->getId(),
                     'email' => $contact->getEmail(),
                     'p[' . $linkListId . ']' => $linkListId,
-                    'status[' . $linkListId . ']' => 1
+                    'status[' . $linkListId . ']' => 1,
                 ]
             )
         );
@@ -44,20 +44,21 @@ class ContactService extends Contact
 
     /**
      * @param array $lists
+     *
      * @return array
      */
     private function getListAndStatusParam(array $lists): array
     {
-        $listIds = array();
+        $listIds = [];
 
         if (count($lists) > 0) {
             /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
             foreach ($lists as $transfer) {
-                $listIds['p[' . $transfer->getListId() . ']'] = (integer) $transfer->getListId();
-                $listIds['status[' . $transfer->getListId() . ']'] = (integer) $transfer->getStatus();
+                $listIds['p[' . $transfer->getListId() . ']'] = (int)$transfer->getListId();
+                $listIds['status[' . $transfer->getListId() . ']'] = (int)$transfer->getStatus();
             }
         }
-        
+
         return $listIds;
     }
 }
