@@ -11,7 +11,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "fond-of-php/active-campaign": "dev-master"
+        "php": ">=7.1",
+        "fond-of-php/active-campaign": "^1.0.0",
+        "spryker/glossary": "^3.0.0",
+        "spryker/kernel": "^3.0.0",
+        "spryker/zed-request": "^3.0.0"
     },
     "require-dev": {
         "spryker/code-sniffer": "^0.11",
