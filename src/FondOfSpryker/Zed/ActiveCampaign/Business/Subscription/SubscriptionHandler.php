@@ -4,9 +4,8 @@ namespace FondOfSpryker\Zed\ActiveCampaign\Business\Subscription;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use FondOfBags\ActiveCampaign\DataTransferObject\Contact;
-//use FondOfBags\ActiveCampaign\Service\Contact as ContactService;
-use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
 use FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig;
+use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
 use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
 use Generated\Shared\Transfer\ActiveCampaignResponseTransfer;
 

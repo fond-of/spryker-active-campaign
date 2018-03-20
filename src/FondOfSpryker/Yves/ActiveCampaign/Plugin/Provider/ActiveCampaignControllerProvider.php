@@ -19,7 +19,6 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     {
         $allowedLocalesPattern = $this->getAllowedLocalesPattern();
 
-
         $this->createController(
             '{locale}/newsletter/subscribe/',
             static::ROUTE_ACTIVECAMPAIGN_FOOTER,
