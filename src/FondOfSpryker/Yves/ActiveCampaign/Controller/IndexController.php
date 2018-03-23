@@ -14,11 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 class IndexController extends AbstractController
 {
     /**
-     * @var \FondOfBags\ActiveCampaign\Service\Contact $test
-     */
-    protected $test;
-
-    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return array

@@ -2,8 +2,8 @@
 
 namespace FondOfSpryker\Zed\ActiveCampaign\Business\Service;
 
-use FondOfBags\ActiveCampaign\DataTransferObject\Contact as ContactTransfer;
-use FondOfBags\ActiveCampaign\Service\Contact;
+use FondOfPHP\ActiveCampaign\DataTransferObject\Contact as ContactTransfer;
+use FondOfPHP\ActiveCampaign\Service\Contact;
 use GuzzleHttp\Client;
 
 class ContactService extends Contact
@@ -20,7 +20,7 @@ class ContactService extends Contact
     }
 
     /**
-     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
+     * @param \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact
      * @param int $linkListId
      *
      * @return void
@@ -52,7 +52,7 @@ class ContactService extends Contact
         $listIds = [];
 
         if (count($lists) > 0) {
-            /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
+            /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
             foreach ($lists as $transfer) {
                 $listIds['p[' . $transfer->getListId() . ']'] = (int)$transfer->getListId();
                 $listIds['status[' . $transfer->getListId() . ']'] = (int)$transfer->getStatus();

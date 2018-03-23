@@ -2,7 +2,7 @@
 
 namespace FondOfSpryker\Zed\ActiveCampaign\Business\Api;
 
-use FondOfBags\ActiveCampaign\Api;
+use FondOfPHP\ActiveCampaign\Api;
 use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
 
 class ActiveCampaignApi extends Api
@@ -21,7 +21,7 @@ class ActiveCampaignApi extends Api
     }
 
     /**
-     * @return \FondOfBags\ActiveCampaign\Service\Contact
+     * @return \FondOfPHP\ActiveCampaign\Service\Contact
      */
     public function getContactService()
     {

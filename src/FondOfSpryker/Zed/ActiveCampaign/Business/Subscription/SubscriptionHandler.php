@@ -3,7 +3,7 @@
 namespace FondOfSpryker\Zed\ActiveCampaign\Business\Subscription;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use FondOfBags\ActiveCampaign\DataTransferObject\Contact;
+use FondOfPHP\ActiveCampaign\DataTransferObject\Contact;
 use FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig;
 use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
 use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
@@ -33,7 +33,7 @@ class SubscriptionHandler
      * SubscriptionHandler constructor.
      *
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $config
-     * @param \FondOfBags\ActiveCampaign\Service\Contact $contactService
+     * @param \FondOfPHP\ActiveCampaign\Service\Contact $contactService
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      */
     public function __construct(
@@ -54,7 +54,7 @@ class SubscriptionHandler
      */
     public function processNewsletterSubscriptions(): void
     {
-        /** @var \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact */
+        /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact */
         $contact = $this->service->getByEmail($this->transfer->getEmail());
 
         $response = new ActiveCampaignResponseTransfer();
@@ -91,7 +91,7 @@ class SubscriptionHandler
     }
 
     /**
-     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
+     * @param \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact
      *
      * @return bool
      */
@@ -99,7 +99,7 @@ class SubscriptionHandler
     {
         if ($contact->getId() > 0 && $contact->getLists()) {
 
-            /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
+            /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
             foreach ($contact->getLists() as $list) {
                 if ($list->getListId() === $this->config->getListId()) {
                     return true;
@@ -111,7 +111,7 @@ class SubscriptionHandler
     }
 
     /**
-     * @param \FondOfBags\ActiveCampaign\DataTransferObject\Contact $contact
+     * @param \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact
      *
      * @return bool
      */
@@ -119,7 +119,7 @@ class SubscriptionHandler
     {
         if (count($contact->getLists()) > 0) {
 
-            /** @var \FondOfBags\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
+            /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
             foreach ($contact->getLists() as $list) {
                 if ($list->getStatus() === 1) {
                     return true;
