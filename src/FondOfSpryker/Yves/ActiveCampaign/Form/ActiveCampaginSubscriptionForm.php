@@ -34,7 +34,6 @@ class ActiveCampaginSubscriptionForm extends AbstractType
         $builder
             ->add(self::FIELD_EMAIL, EmailType::class, [
                 'label' => false,
-                'required' => false,
                 'constraints' => [
                     new NotBlank(),
                 ],
