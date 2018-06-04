@@ -1,8 +1,8 @@
 <?php
 namespace FondOfSpryker\Yves\ActiveCampaign\Plugin\Provider;
 
-use Pyz\Yves\Application\Plugin\Provider\AbstractYvesControllerProvider;
 use Silex\Application;
+use SprykerShop\Yves\ShopApplication\Plugin\Provider\AbstractYvesControllerProvider;
 
 class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
 {
