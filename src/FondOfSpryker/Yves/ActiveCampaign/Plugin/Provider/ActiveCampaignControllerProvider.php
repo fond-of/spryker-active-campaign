@@ -34,7 +34,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
             : self::URL_NEWSLETTER_CONFIRMED_EN;
 
         $this->createController(
-            '{newsletter}/submit/',
+            '{newsletter}/submit',
             static::ROUTE_ACTIVECAMPAIGN_SUBMIT,
             'ActiveCampaign',
             'Index',
@@ -45,7 +45,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
         ;
 
         $this->createController(
-            '{locale}/newsletter/form/',
+            '{locale}/newsletter/form',
             static::ROUTE_ACTIVECAMPAIGN_FOOTER,
             'ActiveCampaign',
             'Index',
@@ -53,7 +53,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
         )->method('GET|POST');
 
         $this->createController(
-            '{newsletter}/' . $subscribe . '/',
+            '{newsletter}/' . $subscribe,
             static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE,
             'ActiveCampaign',
             'Index',
@@ -64,7 +64,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
         ;
 
         $this->createController(
-            '{newsletter}/' . $confirmation . '/',
+            '{newsletter}/' . $confirmation,
             static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM,
             'ActiveCampaign',
             'Index',
