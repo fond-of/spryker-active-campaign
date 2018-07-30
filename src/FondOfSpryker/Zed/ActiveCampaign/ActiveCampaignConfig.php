@@ -8,7 +8,7 @@ use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class ActiveCampaignConfig extends AbstractBundleConfig
 {
-    const DEFAULT_LOCALE = '_DE';
+    const DEFAULT_LOCALE = 'de_DE';
 
     /**
      * @var string
@@ -52,11 +52,7 @@ class ActiveCampaignConfig extends AbstractBundleConfig
      */
     public function initByTransfer(ActiveCampaignRequestTransfer $transfer)
     {
-        $arrLocale = explode("_", $transfer->getLocale());
-
-        $this->locale = (count($arrLocale) === 2 && strlen($arrLocale[0]) === 2)
-            ? '_' . $this->locale = strtoupper($arrLocale[0])
-            : $this->locale = self::DEFAULT_LOCALE;
+        $this->locale = $transfer->getLocale();
 
         $this->apiKey = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_API_KEY);
         $this->url = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_URL);
