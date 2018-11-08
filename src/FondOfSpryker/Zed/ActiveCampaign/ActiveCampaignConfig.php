@@ -52,7 +52,7 @@ class ActiveCampaignConfig extends AbstractBundleConfig
      */
     public function initByTransfer(ActiveCampaignRequestTransfer $transfer)
     {
-        $this->locale = $transfer->getLocale();
+        $this->locale = ($transfer->getLocale()) ?: static::DEFAULT_LOCALE;
 
         $this->apiKey = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_API_KEY);
         $this->url = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_URL);

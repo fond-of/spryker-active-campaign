@@ -1,7 +1,9 @@
 <?php
 namespace FondOfSpryker\Yves\ActiveCampaign\Plugin\Provider;
 
+use FondOfSpryker\Shared\ActiveCampaign\ActiveCampaignConstants;
 use Silex\Application;
+use Spryker\Shared\Config\Config;
 use SprykerShop\Yves\ShopApplication\Plugin\Provider\AbstractYvesControllerProvider;
 
 class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
@@ -10,11 +12,6 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     const ROUTE_ACTIVECAMPAIGN_SUBMIT = 'ROUTE_ACTIVECAMPAIGN_SUBMIT';
     const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE';
     const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM';
-
-    const URL_NEWSLETTER_CONFIRMED_DE = 'anmeldebestaetigung';
-    const URL_NEWSLETTER_CONFIRMED_EN = 'subscribe-confirmation';
-    const URL_NEWSLETTER_SUBSCRIBE_DE = 'anmeldung';
-    const URL_NEWSLETTER_SUBSCRIBE_EN = 'subscribe';
 
     /**
      * @param \Silex\Application $app
@@ -25,13 +22,15 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     {
         $allowedLocalesPattern = $this->getAllowedLocalesPattern();
 
-        $subscribe = ($app->offsetGet('locale') === 'de_DE')
-            ? self::URL_NEWSLETTER_SUBSCRIBE_DE
-            : self::URL_NEWSLETTER_SUBSCRIBE_EN;
+        $confirmation = Config::get(
+            ActiveCampaignConstants::URL_NEWSLETTER_CONFIRMED . $app->offsetGet('locale'),
+            ActiveCampaignConstants::URL_NEWSLETTER_CONFIRMED
+        );
 
-        $confirmation = ($app->offsetGet('locale') === 'de_DE')
-            ? self::URL_NEWSLETTER_CONFIRMED_DE
-            : self::URL_NEWSLETTER_CONFIRMED_EN;
+        $subscribe = Config::get(
+            ActiveCampaignConstants::URL_NEWSLETTER_SUBSCRIBE . $app->offsetGet('locale'),
+            ActiveCampaignConstants::URL_NEWSLETTER_SUBSCRIBE
+        );
 
         $this->createController(
             '{newsletter}/submit',
