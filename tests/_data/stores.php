@@ -15,4 +15,3 @@ return [
         'currencyIsoCodes' => ['EUR'],
     ],
 ];
-config_default.php
