@@ -38,6 +38,7 @@ class ActiveCampaignFacadeTest extends Unit
         $subscriptionHandlerMock->expects($this->exactly(0))
             ->method('isContactActiveOnListId');
 
-        $factoryMock->createSubscriptionHandler($transfer)->processNewsletterSubscriptions();
+        /** @var \FondOfSpryker\Zed\ActiveCampaign\Business\ActiveCampaignBusinessFactory $factoryMock */
+        $factoryMock->createSubscriptionHandler()->processNewsletterSubscriptions($transfer);
     }
 }

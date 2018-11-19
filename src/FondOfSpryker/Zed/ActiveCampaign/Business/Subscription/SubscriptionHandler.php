@@ -30,14 +30,20 @@ class SubscriptionHandler
      * @param \FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig $config
      * @param \FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService $contactService
      */
-    public function __construct(
-        ActiveCampaignConfig $config,
-        ContactService $contactService
-    ) {
+    public function __construct(ActiveCampaignConfig $config, ContactService $contactService)
+    {
         AnnotationRegistry::registerLoader('class_exists');
 
         $this->config = $config;
         $this->service = $contactService;
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\ActiveCampaignResponseTransfer
+     */
+    protected function createActiveCampaignResponseTransfer(): ActiveCampaignResponseTransfer
+    {
+        return new ActiveCampaignResponseTransfer();
     }
 
     /**
@@ -47,34 +53,38 @@ class SubscriptionHandler
      */
     public function processNewsletterSubscriptions(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): void
     {
-        $email = $activeCampaignRequestTransfer->getEmail();
+        $activeCampaignResponseTransfer = $this->createActiveCampaignResponseTransfer();
 
         /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact */
-        $contact = $this->service->getByEmail($email);
-
-        $response = new ActiveCampaignResponseTransfer();
+        $contact = $this->service->getByEmail($activeCampaignRequestTransfer->getEmail());
 
         if ($contact !== null && $contact->getId() > 0) {
-            if (false === $this->isContactActiveOnListId($contact)) {
+            if (false === $this->isContactActiveOnListId($contact, $activeCampaignRequestTransfer)) {
                 if (true === $this->isContactActiveOnAnyList($contact)) {
-                    $response->setAddedToList(true);
-                    $this->service->linkContactToList($contact, $this->config->getListId());
+                    $activeCampaignResponseTransfer->setAddedToList(true);
+                    $this->service->linkContactToList($contact, $this->config->getListId($activeCampaignRequestTransfer->getLocale()));
                 }
             } else {
-                $response->setAllreadyInList(true);
+                $activeCampaignResponseTransfer->setAllreadyInList(true);
             }
         } else {
-            $this->createNewContact();
+            $this->createNewContact($activeCampaignRequestTransfer, $activeCampaignResponseTransfer);
         }
     }
 
     /**
+     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+     * @param \Generated\Shared\Transfer\ActiveCampaignResponseTransfer $activeCampaignResponseTransfer
+     *
+     * @throws
+     *
      * @return \Generated\Shared\Transfer\ActiveCampaignResponseTransfer
      */
-    protected function createNewContact()
-    {
-        $result = $this->service->formRequest(['email' => $this->transfer->getEmail()], $this->config->getFormId());
-        $activeCampaignResponseTransfer = new ActiveCampaignResponseTransfer();
+    protected function createNewContact(
+        ActiveCampaignRequestTransfer $activeCampaignRequestTransfer,
+        ActiveCampaignResponseTransfer $activeCampaignResponseTransfer
+    ): ActiveCampaignResponseTransfer {
+        $result = $this->service->formRequest(['email' => $activeCampaignRequestTransfer->getEmail()], $this->config->getFormId($activeCampaignRequestTransfer->getLocale()));
 
         if ($result === true) {
             $activeCampaignResponseTransfer->setSubscribe(true);
@@ -85,16 +95,17 @@ class SubscriptionHandler
 
     /**
      * @param \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact
+     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      *
      * @return bool
      */
-    protected function isContactActiveOnListId(Contact $contact)
+    protected function isContactActiveOnListId(Contact $contact, ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): bool
     {
         if ($contact->getId() > 0 && $contact->getLists()) {
 
             /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
             foreach ($contact->getLists() as $list) {
-                if ($list->getListId() === $this->config->getListId()) {
+                if ($list->getListId() === $this->config->getListId($activeCampaignRequestTransfer->getLocale())) {
                     return true;
                 }
             }
@@ -108,10 +119,9 @@ class SubscriptionHandler
      *
      * @return bool
      */
-    protected function isContactActiveOnAnyList(Contact $contact)
+    protected function isContactActiveOnAnyList(Contact $contact): bool
     {
         if (count($contact->getLists()) > 0) {
-
             /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $list */
             foreach ($contact->getLists() as $list) {
                 if ($list->getStatus() === 1) {

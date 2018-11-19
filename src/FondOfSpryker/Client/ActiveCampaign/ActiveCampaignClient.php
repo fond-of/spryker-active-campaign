@@ -17,10 +17,6 @@ class ActiveCampaignClient extends AbstractClient implements ActiveCampaignClien
      */
     public function subscribe(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): ActiveCampaignRequestTransfer
     {
-        $response = $this->getFactory()
-            ->createZedStub()
-            ->subscribe($activeCampaignRequestTransfer);
-
-        return $response;
+        return $this->getFactory()->createActiveCampaignStub()->subscribe($activeCampaignRequestTransfer);
     }
 }

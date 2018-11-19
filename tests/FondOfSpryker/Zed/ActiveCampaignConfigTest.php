@@ -13,16 +13,6 @@ class ActiveCampaignConfigTest extends Unit
     protected $activeCampaignConfig;
 
     /**
-     * @var \org\bovigo\vfs\vfsStreamDirectory
-     */
-    protected $vfsStreamDirectory;
-
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
-    private $activeCampaignTransferMock;
-
-    /**
      * @var \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
      */
     private $activeCampaignTransfer;
@@ -32,23 +22,15 @@ class ActiveCampaignConfigTest extends Unit
      */
     protected function _before()
     {
-        /*$this->activeCampaignTransferMock = $this
-            ->getMockBuilder('\Generated\Shared\Transfer\ActiveCampaignTransfer')
-            ->disableOriginalConstructor()
-            ->setMethods(['getLocale', 'setLocale'])
-            ->getMock();*/
-
-        $this->activeCampaignTransfer = new ActiveCampaignRequestTransfer();
-        $this->activeCampaignTransfer->setLocale(ActiveCampaignConfig::DEFAULT_LOCALE);
-
         $this->activeCampaignConfig = new ActiveCampaignConfig();
-        $this->activeCampaignConfig->initByTransfer($this->activeCampaignTransfer);
+        $this->activeCampaignTransfer = new ActiveCampaignRequestTransfer();
+        $this->activeCampaignTransfer->setLocale('de_DE');
     }
 
     /**
      * @return void
      */
-    public function testGetApiKey()
+    public function testGetApiKey(): void
     {
         $this->assertEquals('TESTAPIKEY', $this->activeCampaignConfig->getApiKey());
     }
@@ -56,7 +38,7 @@ class ActiveCampaignConfigTest extends Unit
     /**
      * @return void
      */
-    public function testGetUrl()
+    public function testGetUrl(): void
     {
         $this->assertEquals('API_URL', $this->activeCampaignConfig->getUrl());
     }
@@ -64,44 +46,42 @@ class ActiveCampaignConfigTest extends Unit
     /**
      * @return void
      */
-    public function testGetFormIdDefault()
+    public function testGetFormIdDefault(): void
     {
-        $this->assertEquals(1111, $this->activeCampaignConfig->getFormId());
+        $this->assertEquals(1111, $this->activeCampaignConfig->getFormId($this->activeCampaignTransfer->getLocale()));
     }
 
     /**
      * @return void
      */
-    public function testGetFormIdEn()
+    public function testGetFormIdEn(): void
     {
         $this->activeCampaignTransfer->setLocale('en_US');
-        $this->activeCampaignConfig->initByTransfer($this->activeCampaignTransfer);
-        $this->assertEquals(2222, $this->activeCampaignConfig->getFormId());
+        $this->assertEquals(2222, $this->activeCampaignConfig->getFormId($this->activeCampaignTransfer->getLocale()));
     }
 
     /**
      * @return void
      */
-    public function testGetListIdDefault()
+    public function testGetListIdDefault(): void
     {
-        $this->assertEquals(11, $this->activeCampaignConfig->getListId());
+        $this->assertEquals(11, $this->activeCampaignConfig->getListId($this->activeCampaignTransfer->getLocale()));
     }
 
     /**
      * @return void
      */
-    public function testGetListIdEn()
+    public function testGetListIdEn(): void
     {
         $this->activeCampaignTransfer->setLocale('en_US');
-        $this->activeCampaignConfig->initByTransfer($this->activeCampaignTransfer);
-        $this->assertEquals('subscribe_url', $this->activeCampaignConfig->getSubscribeUrl());
+        $this->assertEquals('subscribe_url', $this->activeCampaignConfig->getSubscribePathPart($this->activeCampaignTransfer->getLocale()));
     }
 
     /**
      * @return void
      */
-    public function testGetSubscribeUrl()
+    public function testGetSubscribeUrl(): void
     {
-        $this->assertEquals('subscribe_confirm_url', $this->activeCampaignConfig->getSubscribeConfirmUrl());
+        $this->assertEquals('subscribe_confirm_url', $this->activeCampaignConfig->getConfirmationPathPart($this->activeCampaignTransfer->getLocale()));
     }
 }

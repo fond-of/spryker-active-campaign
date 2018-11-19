@@ -15,12 +15,9 @@ class ActiveCampaignBusinessFactory extends AbstractBusinessFactory
     /**
      * @return \FondOfSpryker\Zed\ActiveCampaign\Business\Subscription\SubscriptionHandler
      */
-    public function createSubscriptionHandler()
+    public function createSubscriptionHandler(): SubscriptionHandler
     {
-        return new SubscriptionHandler(
-            $this->getConfig(),
-            $this->createContactService()
-        );
+        return new SubscriptionHandler($this->getConfig(), $this->createContactService());
     }
 
     /**

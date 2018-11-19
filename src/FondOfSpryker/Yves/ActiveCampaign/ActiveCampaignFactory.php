@@ -9,12 +9,13 @@ use Symfony\Component\Form\FormInterface;
 class ActiveCampaignFactory extends AbstractFactory
 {
     /**
+     * @throws
+     *
      * @return \Symfony\Component\Form\FormInterface
      */
     public function getActiveCampaignSubscriptionForm(): FormInterface
     {
-        return $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY)
-            ->create($this->createActiveCampaginSubscriptionForm());
+        return $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY)->create($this->createActiveCampaginSubscriptionForm());
     }
 
     /**

@@ -3,73 +3,16 @@
 namespace FondOfSpryker\Zed\ActiveCampaign;
 
 use FondOfSpryker\Shared\ActiveCampaign\ActiveCampaignConstants;
-use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 
 class ActiveCampaignConfig extends AbstractBundleConfig
 {
-    const DEFAULT_LOCALE = 'de_DE';
-
-    /**
-     * @var string
-     */
-    private $apiKey;
-
-    /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var integer
-     */
-    private $formId;
-
-    /**
-     * @var integer
-     */
-    private $listId;
-
-    /**
-     * @var string
-     */
-    private $subscribeUrl;
-
-    /**
-     * @var string
-     */
-    private $subcribeConfirmUrl;
-
-    /**
-     * @var string|null
-     */
-    private $locale = null;
-
-    /**
-     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $transfer
-     *
-     * @return $this
-     */
-    public function initByTransfer(ActiveCampaignRequestTransfer $transfer)
-    {
-        $this->locale = ($transfer->getLocale()) ?: static::DEFAULT_LOCALE;
-
-        $this->apiKey = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_API_KEY);
-        $this->url = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_URL);
-        $this->formId = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_FORMID . $this->locale);
-        $this->listId = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_LISTID . $this->locale);
-        $this->subscribeUrl = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_SUBSCRIBE_URL);
-        $this->subcribeConfirmUrl = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_CONFIRMATION_URL);
-
-        return $this;
-    }
-
     /**
      * @return string
      */
     public function getApiKey(): string
     {
-        return $this->apiKey;
+        return $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_API_KEY);
     }
 
     /**
@@ -77,39 +20,47 @@ class ActiveCampaignConfig extends AbstractBundleConfig
      */
     public function getUrl(): string
     {
-        return $this->url;
+        return $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_URL);
     }
 
     /**
+     * @param string $locale
+     *
      * @return int
      */
-    public function getFormId(): int
+    public function getFormId(string $locale): int
     {
-        return $this->formId;
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_FORM_ID, $locale);
     }
 
     /**
+     * @param string $locale
+     *
      * @return int
      */
-    public function getListId(): int
+    public function getListId(string $locale): int
     {
-        return $this->listId;
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_LIST_ID, $locale);
     }
 
     /**
+     * @param string $locale
+     *
      * @return string
      */
-    public function getSubscribeUrl(): string
+    public function getSubscribePathPart(string $locale): string
     {
-        return $this->subscribeUrl;
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_SUBSCRIBE_PATH_PART, $locale);
     }
 
     /**
+     * @param string $locale
+     *
      * @return string
      */
-    public function getSubscribeConfirmUrl(): string
+    public function getConfirmationPathPart(string $locale): string
     {
-        return $this->subcribeConfirmUrl;
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_CONFIRMATION_PATH_PART, $locale);
     }
 
     /**

@@ -40,8 +40,9 @@ class ContactService extends Contact
 
         /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
         foreach ($lists as $transfer) {
-            $listIds['p[' . $transfer->getListId() . ']'] = (int)$transfer->getListId();
-            $listIds['status[' . $transfer->getListId() . ']'] = (int)$transfer->getStatus();
+            $currentListId = (int)$transfer->getListId();
+            $listIds['p[' . $currentListId . ']'] = $currentListId;
+            $listIds['status[' . $currentListId . ']'] = (int)$transfer->getStatus();
         }
 
         return $listIds;

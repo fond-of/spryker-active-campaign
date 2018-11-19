@@ -9,7 +9,7 @@ interface ActiveCampaignFacadeInterface
     /**
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      *
-     * @return \Generated\Shared\Transfer\ActiveCampaignResponseTransfer
+     * @return void
      */
-    public function subscribeToActiveCampaign(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer);
+    public function subscribeToActiveCampaign(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): void;
 }

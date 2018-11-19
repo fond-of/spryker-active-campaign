@@ -5,8 +5,9 @@ namespace FondOfSpryker\Yves\ActiveCampaign\Controller;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use FondOfSpryker\Yves\ActiveCampaign\Plugin\Provider\ActiveCampaignControllerProvider;
 use Generated\Shared\Transfer\ActiveCampaignRequestTransfer;
-use Pyz\Yves\Application\Plugin\Provider\ApplicationControllerProvider;
 use Spryker\Yves\Kernel\Controller\AbstractController;
+use SprykerShop\Yves\HomePage\Plugin\Provider\HomePageControllerProvider;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,35 +17,38 @@ use Symfony\Component\HttpFoundation\Request;
 class IndexController extends AbstractController
 {
     /**
+     * @param string $email
+     *
+     * @return \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
+     */
+    protected function createActiveCampaignRequestTransfer(string $email): ActiveCampaignRequestTransfer
+    {
+        $activeCampaignRequestTransfer = new ActiveCampaignRequestTransfer();
+        $activeCampaignRequestTransfer->setEmail($email);
+        $activeCampaignRequestTransfer->setLocale($this->getLocale());
+
+        return $activeCampaignRequestTransfer;
+    }
+    
+    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return array
      */
-    public function formAction(Request $request)
+    public function formAction(Request $request): array
     {
         AnnotationRegistry::registerLoader('class_exists');
 
-        $activeCampaignSubscriptionForm = $this
-            ->getFactory()
-            ->getActiveCampaignSubscriptionForm();
-
         $parentRequest = $this->getApplication()['request_stack']->getParentRequest();
-
         if ($parentRequest !== null) {
             $request = $parentRequest;
         }
 
-        $activeCampaignSubscriptionForm->handleRequest($request);
-
+        $activeCampaignSubscriptionForm = $this->getFactory()->getActiveCampaignSubscriptionForm()->handleRequest($request);
         if ($activeCampaignSubscriptionForm->isValid()) {
-
-            /** @var \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $transfer */
-            $transfer = new ActiveCampaignRequestTransfer();
-            $transfer
-                ->setEmail($activeCampaignSubscriptionForm->get('email')->getData())
-                ->setLocale($this->getLocale());
-
-            $response = $this->getClient()->subscribe($transfer);
+            $this->getClient()->subscribe(
+                $this->createActiveCampaignRequestTransfer($activeCampaignSubscriptionForm->get('email')->getData())
+            );
         }
 
         return [
@@ -53,36 +57,24 @@ class IndexController extends AbstractController
     }
 
     /**
-     * we need to request the submit on this function because we cant
-     * redirect an form rendering view.
-     *
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function submitAction(Request $request)
+    public function submitAction(Request $request): RedirectResponse
     {
-        $activeCampaignSubscriptionForm = $this
-            ->getFactory()
-            ->getActiveCampaignSubscriptionForm();
-
-        $activeCampaignSubscriptionForm->handleRequest($request);
-
-        if ($activeCampaignSubscriptionForm->isValid()) {
-            /** @var \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $transfer */
-            $transfer = new ActiveCampaignRequestTransfer();
-            $transfer
-                ->setEmail($activeCampaignSubscriptionForm->get('email')->getData())
-                ->setLocale($this->getLocale());
-
-            $response = $this->getClient()->subscribe($transfer);
-
-            return $this->redirectResponseInternal(ActiveCampaignControllerProvider::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE, [
-                'newsletter' => 'newsletter',
-            ]);
-        } else {
-            return $this->redirectResponseInternal(ApplicationControllerProvider::ROUTE_HOME);
+        $activeCampaignSubscriptionForm = $this->getFactory()->getActiveCampaignSubscriptionForm()->handleRequest($request);
+        if (!$activeCampaignSubscriptionForm->isValid()) {
+            return $this->redirectResponseInternal(HomePageControllerProvider::ROUTE_HOME);
         }
+
+        $this->getClient()->subscribe(
+            $this->createActiveCampaignRequestTransfer($activeCampaignSubscriptionForm->get('email')->getData())
+        );
+
+        return $this->redirectResponseInternal(ActiveCampaignControllerProvider::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE, [
+            'newsletter' => 'newsletter',
+        ]);
     }
 
     /**
@@ -90,7 +82,7 @@ class IndexController extends AbstractController
      *
      * @return array
      */
-    public function subscribeConfirmationAction(Request $request)
+    public function subscribeConfirmationAction(Request $request): array
     {
         return [];
     }
@@ -100,7 +92,7 @@ class IndexController extends AbstractController
      *
      * @return array
      */
-    public function subscribeAction(Request $request)
+    public function subscribeAction(Request $request): array
     {
         return [];
     }
