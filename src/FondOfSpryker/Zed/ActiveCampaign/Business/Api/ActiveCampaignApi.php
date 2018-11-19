@@ -7,26 +7,17 @@ use FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService;
 
 class ActiveCampaignApi extends Api
 {
-    const CONTACT_KEY = 'contact';
+    protected const SERVICE_CONTACT = 'SERVICE_CONTACT';
 
     /**
-     * @param string $baseUri
-     * @param string $key
+     * @return \FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService
      */
-    public function __construct($baseUri, $key)
+    public function getContactService(): ContactService
     {
-        parent::__construct($baseUri, $key);
-    }
-
-    /**
-     * @return \FondOfPHP\ActiveCampaign\Service\Contact
-     */
-    public function getContactService()
-    {
-        if (!array_key_exists(self::CONTACT_KEY, $this->services)) {
-            $this->services[self::CONTACT_KEY] = new ContactService($this->httpClient, $this->key);
+        if (!array_key_exists(static::SERVICE_CONTACT, $this->services)) {
+            $this->services[static::SERVICE_CONTACT] = new ContactService($this->httpClient, $this->key);
         }
 
-        return $this->services[self::CONTACT_KEY];
+        return $this->services[static::SERVICE_CONTACT];
     }
 }

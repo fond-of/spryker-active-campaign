@@ -25,37 +25,32 @@ class SubscriptionHandler
     protected $service;
 
     /**
-     * @var \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
-     */
-    protected $transfer;
-
-    /**
      * SubscriptionHandler constructor.
      *
-     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $config
-     * @param \FondOfPHP\ActiveCampaign\Service\Contact $contactService
-     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+     * @param \FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig $config
+     * @param \FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService $contactService
      */
     public function __construct(
         ActiveCampaignConfig $config,
-        ContactService $contactService,
-        ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+        ContactService $contactService
     ) {
         AnnotationRegistry::registerLoader('class_exists');
 
         $this->config = $config;
-        $this->transfer = $activeCampaignRequestTransfer;
-        $this->config->initByTransfer($this->transfer);
         $this->service = $contactService;
     }
 
     /**
+     * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
+     *
      * @return void
      */
-    public function processNewsletterSubscriptions(): void
+    public function processNewsletterSubscriptions(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): void
     {
+        $email = $activeCampaignRequestTransfer->getEmail();
+
         /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact */
-        $contact = $this->service->getByEmail($this->transfer->getEmail());
+        $contact = $this->service->getByEmail($email);
 
         $response = new ActiveCampaignResponseTransfer();
 
@@ -69,10 +64,8 @@ class SubscriptionHandler
                 $response->setAllreadyInList(true);
             }
         } else {
-            $response = $this->createNewContact();
+            $this->createNewContact();
         }
-
-        //return $response;
     }
 
     /**

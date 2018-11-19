@@ -4,21 +4,9 @@ namespace FondOfSpryker\Zed\ActiveCampaign\Business\Service;
 
 use FondOfPHP\ActiveCampaign\DataTransferObject\Contact as ContactTransfer;
 use FondOfPHP\ActiveCampaign\Service\Contact;
-use GuzzleHttp\Client;
 
 class ContactService extends Contact
 {
-    /**
-     * ContactService constructor.
-     *
-     * @param \GuzzleHttp\Client $httpClient
-     * @param string $apiKey
-     */
-    public function __construct(Client $httpClient, string $apiKey)
-    {
-        parent::__construct($httpClient, $apiKey);
-    }
-
     /**
      * @param \FondOfPHP\ActiveCampaign\DataTransferObject\Contact $contact
      * @param int $linkListId
@@ -29,17 +17,12 @@ class ContactService extends Contact
     {
         $params = $this->getListAndStatusParam($contact->getLists());
 
-        $response = $this->update(
-            array_merge(
-                $params,
-                [
-                    'id' => $contact->getId(),
-                    'email' => $contact->getEmail(),
-                    'p[' . $linkListId . ']' => $linkListId,
-                    'status[' . $linkListId . ']' => 1,
-                ]
-            )
-        );
+        $this->update(array_merge($params, [
+            'id' => $contact->getId(),
+            'email' => $contact->getEmail(),
+            'p[' . $linkListId . ']' => $linkListId,
+            'status[' . $linkListId . ']' => 1,
+        ]));
     }
 
     /**
