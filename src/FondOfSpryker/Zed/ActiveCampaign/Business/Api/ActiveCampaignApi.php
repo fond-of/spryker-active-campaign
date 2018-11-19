@@ -10,8 +10,6 @@ class ActiveCampaignApi extends Api
     const CONTACT_KEY = 'contact';
 
     /**
-     * ActiveCampaignApi constructor.
-     *
      * @param string $baseUri
      * @param string $key
      */

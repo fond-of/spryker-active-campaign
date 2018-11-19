@@ -51,12 +51,14 @@ class ContactService extends Contact
     {
         $listIds = [];
 
-        if (count($lists) > 0) {
-            /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
-            foreach ($lists as $transfer) {
-                $listIds['p[' . $transfer->getListId() . ']'] = (int)$transfer->getListId();
-                $listIds['status[' . $transfer->getListId() . ']'] = (int)$transfer->getStatus();
-            }
+        if (count($lists) <= 0) {
+            return $listIds;
+        }
+
+        /** @var \FondOfPHP\ActiveCampaign\DataTransferObject\ContactMailingListRelation $transfer */
+        foreach ($lists as $transfer) {
+            $listIds['p[' . $transfer->getListId() . ']'] = (int)$transfer->getListId();
+            $listIds['status[' . $transfer->getListId() . ']'] = (int)$transfer->getStatus();
         }
 
         return $listIds;

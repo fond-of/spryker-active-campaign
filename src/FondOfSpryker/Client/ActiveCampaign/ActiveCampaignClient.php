@@ -11,19 +11,11 @@ use Spryker\Client\Kernel\AbstractClient;
 class ActiveCampaignClient extends AbstractClient implements ActiveCampaignClientInterface
 {
     /**
-     * @return Zed\ActiveCampaignStub
-     */
-    protected function getZedStub()
-    {
-        return $this->getFactory()->createZedStub();
-    }
-
-    /**
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      *
-     * @return \Spryker\Shared\Kernel\Transfer\TransferInterface
+     * @return \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
      */
-    public function subscribe(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer)
+    public function subscribe(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): ActiveCampaignRequestTransfer
     {
         $response = $this->getFactory()
             ->createZedStub()

@@ -17,7 +17,7 @@ class GatewayController extends AbstractGatewayController
      */
     public function subscribeAction(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer)
     {
-        $response = $this->getFacade()->subscribeToActiveCampaign($activeCampaignRequestTransfer);
+        $this->getFacade()->subscribeToActiveCampaign($activeCampaignRequestTransfer);
 
         return $activeCampaignRequestTransfer;
     }

@@ -1,76 +1,95 @@
 <?php
+
 namespace FondOfSpryker\Yves\ActiveCampaign\Plugin\Provider;
 
-use FondOfSpryker\Shared\ActiveCampaign\ActiveCampaignConstants;
 use Silex\Application;
-use Spryker\Shared\Config\Config;
+use Spryker\Yves\Kernel\BundleConfigResolverAwareTrait;
 use SprykerShop\Yves\ShopApplication\Plugin\Provider\AbstractYvesControllerProvider;
 
+/**
+ * @method \FondOfSpryker\Yves\ActiveCampaign\ActiveCampaignConfig getConfig()
+ */
 class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
 {
-    const ROUTE_ACTIVECAMPAIGN_FOOTER = 'ROUTE_ACTIVECAMPAIGN_FOOTER';
-    const ROUTE_ACTIVECAMPAIGN_SUBMIT = 'ROUTE_ACTIVECAMPAIGN_SUBMIT';
-    const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE';
-    const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM';
+    use BundleConfigResolverAwareTrait;
+
+    public const ROUTE_ACTIVECAMPAIGN_FOOTER = 'ROUTE_ACTIVECAMPAIGN_FOOTER';
+    public const ROUTE_ACTIVECAMPAIGN_SUBMIT = 'ROUTE_ACTIVECAMPAIGN_SUBMIT';
+    public const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE';
+    public const ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM = 'ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM';
 
     /**
      * @param \Silex\Application $app
      *
      * @return void
      */
-    protected function defineControllers(Application $app)
+    protected function defineControllers(Application $app): void
     {
-        $allowedLocalesPattern = $this->getAllowedLocalesPattern();
+        $locale = $app->offsetGet('locale');
 
-        $confirmation = Config::get(
-            ActiveCampaignConstants::URL_NEWSLETTER_CONFIRMED . $app->offsetGet('locale'),
-            ActiveCampaignConstants::URL_NEWSLETTER_CONFIRMED
-        );
+        $this->addFormRoute()
+            ->addFormSubmitRoute()
+            ->addSubscribeRoute($locale)
+            ->addConfirmationRoute($locale);
+    }
 
-        $subscribe = Config::get(
-            ActiveCampaignConstants::URL_NEWSLETTER_SUBSCRIBE . $app->offsetGet('locale'),
-            ActiveCampaignConstants::URL_NEWSLETTER_SUBSCRIBE
-        );
+    /**
+     * @return $this
+     */
+    protected function addFormSubmitRoute(): self
+    {
+        $this->createController('/{newsletter}/submit', static::ROUTE_ACTIVECAMPAIGN_SUBMIT, 'ActiveCampaign', 'Index', 'submit')
+            ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
+            ->value('newsletter', 'newsletter')
+            ->method('GET|POST');
 
-        $this->createController(
-            '{newsletter}/submit',
-            static::ROUTE_ACTIVECAMPAIGN_SUBMIT,
-            'ActiveCampaign',
-            'Index',
-            'submit'
-        )
-            ->method('GET|POST')
-            ->assert('newsletter', $allowedLocalesPattern . 'newsletter|newsletter');
-        ;
+        return $this;
+    }
 
-        $this->createController(
-            '{locale}/newsletter/form',
-            static::ROUTE_ACTIVECAMPAIGN_FOOTER,
-            'ActiveCampaign',
-            'Index',
-            'form'
-        )->method('GET|POST');
+    /**
+     * @return $this
+     */
+    protected function addFormRoute(): self
+    {
+        $this->createController('/{newsletter}/form', static::ROUTE_ACTIVECAMPAIGN_FOOTER, 'ActiveCampaign', 'Index', 'form')
+            ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
+            ->value('newsletter', 'newsletter')
+            ->method('GET|POST');
 
-        $this->createController(
-            '{newsletter}/' . $subscribe,
-            static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE,
-            'ActiveCampaign',
-            'Index',
-            'subscribe'
-        )
-            ->method('GET')
-            ->assert('newsletter', $allowedLocalesPattern . 'newsletter|newsletter');
-        ;
+        return $this;
+    }
 
-        $this->createController(
-            '{newsletter}/' . $confirmation,
-            static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE_CONFIRM,
-            'ActiveCampaign',
-            'Index',
-            'subscribeConfirmation'
-        )
-            ->method('GET')
-            ->assert('newsletter', $allowedLocalesPattern . 'newsletter|newsletter');
-        ;
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    protected function addSubscribeRoute(string $locale): self
+    {
+        $subscribePathPart = $this->getConfig()->getSubscribePathPart($locale);
+
+        $this->createController(sprintf('/{newsletter}/%s', $subscribePathPart), static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE, 'ActiveCampaign', 'Index', 'subscribe')
+            ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
+            ->value('newsletter', 'newsletter')
+            ->method('GET');
+
+        return $this;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return $this
+     */
+    protected function addConfirmationRoute(string $locale): self
+    {
+        $confirmationPathPart = $this->getConfig()->getConfirmationPathPart($locale);
+
+        $this->createController(sprintf('/{newsletter}/%s', $confirmationPathPart), static::ROUTE_ACTIVECAMPAIGN_SUBSCRIBE, 'ActiveCampaign', 'Index', 'subscribeConfirmation')
+            ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
+            ->value('newsletter', 'newsletter')
+            ->method('GET');
+
+        return $this;
     }
 }

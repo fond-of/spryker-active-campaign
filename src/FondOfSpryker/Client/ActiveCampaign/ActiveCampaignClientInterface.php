@@ -9,7 +9,7 @@ interface ActiveCampaignClientInterface
     /**
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      *
-     * @return \Spryker\Shared\Kernel\Transfer\TransferInterface
+     * @return \Generated\Shared\Transfer\ActiveCampaignRequestTransfer
      */
-    public function subscribe(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer);
+    public function subscribe(ActiveCampaignRequestTransfer $activeCampaignRequestTransfer): ActiveCampaignRequestTransfer;
 }
