@@ -12,9 +12,9 @@ class ActiveCampaignConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getSubscribePathPart(string $locale): string
+    public function getSubscribePath(string $locale): string
     {
-        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_SUBSCRIBE_PATH_PART, $locale);
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_SUBSCRIBE_PATH, $locale);
     }
 
     /**
@@ -22,9 +22,9 @@ class ActiveCampaignConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getConfirmationPathPart(string $locale): string
+    public function getConfirmationPath(string $locale): string
     {
-        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_CONFIRMATION_PATH_PART, $locale);
+        return $this->getLocalized(ActiveCampaignConstants::ACTIVE_CAMPAIGN_CONFIRMATION_PATH, $locale);
     }
 
     /**
