@@ -7,7 +7,7 @@ use Spryker\Client\Kernel\Container;
 
 class ActiveCampaignDependencyProvider extends AbstractDependencyProvider
 {
-    const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
+    public const CLIENT_ZED_REQUEST = 'CLIENT_ZED_REQUEST';
 
     /**
      * @param \Spryker\Client\Kernel\Container $container

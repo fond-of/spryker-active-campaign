@@ -74,17 +74,17 @@ class ActiveCampaignConfig extends AbstractBundleConfig
     {
         $localizedConfigs = $this->get(ActiveCampaignConstants::ACTIVE_CAMPAIGN_LOCALIZED_CONFIGS, []);
 
-        if (!\is_array($localizedConfigs) || empty($localizedConfigs)) {
+        if (!is_array($localizedConfigs) || empty($localizedConfigs)) {
             return $default;
         }
 
-        if (!\array_key_exists($locale, $localizedConfigs) || !\is_array($localizedConfigs[$locale])) {
+        if (!array_key_exists($locale, $localizedConfigs) || !is_array($localizedConfigs[$locale])) {
             return $default;
         }
 
         $configs = $localizedConfigs[$locale];
 
-        if (!\array_key_exists($key, $configs)) {
+        if (!array_key_exists($key, $configs)) {
             return $default;
         }
 

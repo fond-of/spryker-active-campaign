@@ -18,8 +18,6 @@ class ActiveCampaignFactory extends AbstractFactory
     }
 
     /**
-     * @throws
-     *
      * @return \Spryker\Client\ZedRequest\ZedRequestClientInterface
      */
     public function getZedRequestClient(): ZedRequestClientInterface

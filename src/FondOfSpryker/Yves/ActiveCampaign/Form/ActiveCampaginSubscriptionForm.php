@@ -9,11 +9,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * @method \FondOfSpryker\Yves\ActiveCampaign\ActiveCampaignConfig getConfig()
+ */
 class ActiveCampaginSubscriptionForm extends AbstractType
 {
-    const FORM_ID = 'active_campagin';
-    const FIELD_EMAIL = 'email';
-    const FIELD_SUBMIT = 'submit';
+    public const FORM_ID = 'active_campagin';
+    public const FIELD_EMAIL = 'email';
+    public const FIELD_SUBMIT = 'submit';
 
     /**
      * @return string

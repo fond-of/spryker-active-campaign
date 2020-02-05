@@ -1,4 +1,5 @@
 <?php
+
 namespace FondOfSpryker\Yves\ActiveCampaign;
 
 use FondOfSpryker\Yves\ActiveCampaign\Form\ActiveCampaginSubscriptionForm;
@@ -9,8 +10,6 @@ use Symfony\Component\Form\FormInterface;
 class ActiveCampaignFactory extends AbstractFactory
 {
     /**
-     * @throws
-     *
      * @return \Symfony\Component\Form\FormInterface
      */
     public function getActiveCampaignSubscriptionForm(): FormInterface

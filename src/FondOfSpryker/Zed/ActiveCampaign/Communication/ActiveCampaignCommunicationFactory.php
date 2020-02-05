@@ -6,6 +6,7 @@ use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
 
 /**
  * @method \FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig getConfig()
+ * @method \FondOfSpryker\Zed\ActiveCampaign\Business\ActiveCampaignFacadeInterface getFacade()
  */
 class ActiveCampaignCommunicationFactory extends AbstractCommunicationFactory
 {

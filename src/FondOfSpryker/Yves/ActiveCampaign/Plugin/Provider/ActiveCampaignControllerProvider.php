@@ -36,7 +36,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     /**
      * @return $this
      */
-    protected function addFormSubmitRoute(): self
+    protected function addFormSubmitRoute()
     {
         $this->createController('/{newsletter}/submit', static::ROUTE_ACTIVECAMPAIGN_SUBMIT, 'ActiveCampaign', 'Index', 'submit')
             ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
@@ -49,7 +49,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
     /**
      * @return $this
      */
-    protected function addFormRoute(): self
+    protected function addFormRoute()
     {
         $this->createController('/{newsletter}/form', static::ROUTE_ACTIVECAMPAIGN_FOOTER, 'ActiveCampaign', 'Index', 'form')
             ->assert('newsletter', $this->getAllowedLocalesPattern() . 'newsletter|newsletter')
@@ -64,7 +64,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
      *
      * @return $this
      */
-    protected function addSubscribeRoute(string $locale): self
+    protected function addSubscribeRoute(string $locale)
     {
         $subscribePathPart = $this->getConfig()->getSubscribePath($locale);
 
@@ -81,7 +81,7 @@ class ActiveCampaignControllerProvider extends AbstractYvesControllerProvider
      *
      * @return $this
      */
-    protected function addConfirmationRoute(string $locale): self
+    protected function addConfirmationRoute(string $locale)
     {
         $confirmationPathPart = $this->getConfig()->getConfirmationPath($locale);
 

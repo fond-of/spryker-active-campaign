@@ -25,8 +25,6 @@ class SubscriptionHandler
     protected $service;
 
     /**
-     * SubscriptionHandler constructor.
-     *
      * @param \FondOfSpryker\Zed\ActiveCampaign\ActiveCampaignConfig $config
      * @param \FondOfSpryker\Zed\ActiveCampaign\Business\Service\ContactService $contactService
      */
@@ -59,8 +57,8 @@ class SubscriptionHandler
         $contact = $this->service->getByEmail($activeCampaignRequestTransfer->getEmail());
 
         if ($contact !== null && $contact->getId() > 0) {
-            if (false === $this->isContactActiveOnListId($contact, $activeCampaignRequestTransfer)) {
-                if (true === $this->isContactActiveOnAnyList($contact)) {
+            if ($this->isContactActiveOnListId($contact, $activeCampaignRequestTransfer) === false) {
+                if ($this->isContactActiveOnAnyList($contact) === true) {
                     $activeCampaignResponseTransfer->setAddedToList(true);
                     $this->service->linkContactToList($contact, $this->config->getListId($activeCampaignRequestTransfer->getLocale()));
                 }
@@ -75,8 +73,6 @@ class SubscriptionHandler
     /**
      * @param \Generated\Shared\Transfer\ActiveCampaignRequestTransfer $activeCampaignRequestTransfer
      * @param \Generated\Shared\Transfer\ActiveCampaignResponseTransfer $activeCampaignResponseTransfer
-     *
-     * @throws
      *
      * @return \Generated\Shared\Transfer\ActiveCampaignResponseTransfer
      */
